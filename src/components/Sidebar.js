@@ -10,22 +10,7 @@ export default function Sidebar({ setCategory, closeSidebar, setSort }) {
   ];
 
   return (
-    <div
-      style={{
-        width: "250px",
-        height: "100vh",
-        background: "#f4f4f4",
-        padding: "20px",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        zIndex: 1000,
-        boxShadow: "2px 0 8px rgba(0,0,0,0.3)",
-        transition: "0.3s ease",
-        overflowY: "auto",
-      }}
-    >
-      {/* زر الإغلاق */}
+    <div className="sidebar">
       <button
         onClick={closeSidebar}
         style={{
@@ -40,7 +25,6 @@ export default function Sidebar({ setCategory, closeSidebar, setSort }) {
         ✖
       </button>
 
-      {/* الفئات */}
       <h3>Categories</h3>
       <ul style={{ listStyle: "none", padding: 0 }}>
         {categories.map((cat, i) => (
@@ -59,7 +43,6 @@ export default function Sidebar({ setCategory, closeSidebar, setSort }) {
 
       <hr />
 
-      {/* الترتيب */}
       <h3>Sort By</h3>
       <ul style={{ listStyle: "none", padding: 0 }}>
         <li

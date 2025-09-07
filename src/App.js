@@ -17,33 +17,22 @@ export default function App() {
   const [user, setUser] = useState(null);
 
   const addToCart = (product) => {
-    setCart((prevCart) => {
-      const exist = prevCart.find((item) => item.id === product.id);
-      if (exist) {
-        return prevCart.map((item) =>
-          item.id === product.id ? { ...item, qty: item.qty + 1 } : item
-        );
-      }
-      return [...prevCart, { ...product, qty: 1 }];
+    setCart((prev) => {
+      const exist = prev.find((item) => item.id === product.id);
+      if (exist) return prev.map((item) => item.id === product.id ? { ...item, qty: item.qty + 1 } : item);
+      return [...prev, { ...product, qty: 1 }];
     });
   };
 
   const updateQuantity = (id, qty) => {
-    setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.id === id ? { ...item, qty: Math.max(1, qty) } : item
-      )
-    );
+    setCart((prev) => prev.map((item) => item.id === id ? { ...item, qty: Math.max(1, qty) } : item));
   };
 
-  const removeFromCart = (id) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
-  };
+  const removeFromCart = (id) => setCart((prev) => prev.filter((item) => item.id !== id));
 
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setCart(savedCart);
-
     const savedUser = JSON.parse(localStorage.getItem("user"));
     if (savedUser) setUser(savedUser);
   }, []);
@@ -76,18 +65,18 @@ export default function App() {
 
   return (
     <Router>
-      <div style={{ overflowX: "hidden" }}>
-        <Navbar
-          toggleSidebar={() => setSidebarOpen(true)}
-          cart={cart}
-          removeFromCart={removeFromCart}
-          updateQuantity={updateQuantity}
-          setSearch={setSearch}
-          user={user}
-          setUser={setUser}
-        />
+      <Navbar
+        toggleSidebar={() => setSidebarOpen(true)}
+        cart={cart}
+        removeFromCart={removeFromCart}
+        updateQuantity={updateQuantity}
+        setSearch={setSearch}
+        user={user}
+        setUser={setUser}
+      />
 
-        {sidebarOpen && (
+      {sidebarOpen && (
+        <>
           <div
             onClick={() => setSidebarOpen(false)}
             style={{
@@ -100,39 +89,37 @@ export default function App() {
               zIndex: 900,
             }}
           />
-        )}
-
-        {sidebarOpen && (
           <Sidebar
             setCategory={setCategory}
             setSort={setSort}
             closeSidebar={() => setSidebarOpen(false)}
           />
-        )}
+        </>
+      )}
 
-        <div
-          style={{
-            marginLeft: sidebarOpen ? "250px" : "0",
-            transition: "margin-left 0.3s ease",
-            padding: "20px",
-            minHeight: "100vh",
-          }}
-        >
-          <Routes>
-            <Route
-              path="/"
-              element={<ProductList products={filteredProducts} addToCart={addToCart} />}
-            />
-            <Route
-              path="/product/:id"
-              element={<ProductDetails products={products} addToCart={addToCart} />}
-            />
-          </Routes>
-        </div>
+      <div
+        className="main-content"
+        style={{
+          marginLeft: sidebarOpen ? "250px" : "0",
+          transition: "margin-left 0.3s ease",
+          minHeight: "100vh",
+        }}
+      >
+        <Routes>
+          <Route
+            path="/"
+            element={<ProductList products={filteredProducts} addToCart={addToCart} />}
+          />
+          <Route
+            path="/product/:id"
+            element={<ProductDetails products={products} addToCart={addToCart} />}
+          />
+        </Routes>
       </div>
     </Router>
   );
 }
+
 
 
 
